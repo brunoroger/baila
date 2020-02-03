@@ -2,7 +2,7 @@
 
 ## Instalation for Linux:
 
-- `cd cmd/baila && go build baila.go && sudo mv baila /usr/local/bin`
+- `make install_linux`
 
 ## Commands available:
 
