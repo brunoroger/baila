@@ -6,6 +6,7 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 )
 
 // TemperatureServicer service
@@ -23,9 +24,19 @@ func (s TemperatureServicer) Temperature(city string, unit string) (*baila.Tempe
 		return nil, errors.New("unit not found")
 	}
 
-	url := "https://openweathermap.org/data/2.5/weather?q=" + city + "&appid=b6907d289e10d714a6e88b30761fae22&units=" + unit
+	baseURL, errEncode := url.Parse("https://openweathermap.org/data/2.5/weather")
+	if errEncode != nil {
+		return nil, errEncode
+	}
 
-	req, errReq := http.NewRequest("GET", url, nil)
+	params := url.Values{}
+	params.Add("q", city)
+	params.Add("appid", "b6907d289e10d714a6e88b30761fae22")
+	params.Add("units", unit)
+
+	baseURL.RawQuery = params.Encode()
+
+	req, errReq := http.NewRequest("GET", baseURL.String(), nil)
 	if errReq != nil {
 		return nil, errReq
 	}
@@ -42,7 +53,10 @@ func (s TemperatureServicer) Temperature(city string, unit string) (*baila.Tempe
 	}
 
 	var temp baila.Temperature
-	json.Unmarshal(body, &temp)
+	errReadyJSON := json.Unmarshal(body, &temp)
+	if errReadyJSON != nil {
+		return nil, errReadyJSON
+	}
 
 	return &temp, nil
 }

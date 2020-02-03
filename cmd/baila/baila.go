@@ -63,18 +63,20 @@ func main() {
 			city, errCity := in.ReadString('\n')
 			if errCity != nil {
 				fmt.Println(errCity)
-			} else {
-				city = strings.ReplaceAll(city, "\n", "")
+				return
 			}
+
+			city = strings.ReplaceAll(city, "\n", "")
 
 			fmt.Println("Enter unit (1 - celsius, 2 - fahrenheit): ")
 
 			unit, errUnit := in.ReadString('\n')
 			if errUnit != nil {
 				fmt.Println(errUnit)
-			} else {
-				unit = strings.ReplaceAll(unit, "\n", "")
+				return
 			}
+
+			unit = strings.ReplaceAll(unit, "\n", "")
 
 			service := api.TemperatureServicer{}
 
@@ -82,9 +84,10 @@ func main() {
 
 			if err != nil {
 				fmt.Println(err)
-			} else {
-				fmt.Println("Temperature:", response.Main.Temp)
+				return
 			}
+
+			fmt.Println("Temperature:", response.Main.Temp)
 		}
 	}
 }
