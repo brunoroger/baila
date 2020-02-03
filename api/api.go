@@ -9,11 +9,16 @@ import (
 	"net/url"
 )
 
-// TemperatureServicer service
-type TemperatureServicer struct{}
+// temperatureServicer service
+type temperatureServicer struct{}
+
+// NewTemperatureServicer return instance temperatureservicer
+func NewTemperatureServicer() temperatureServicer {
+	return temperatureServicer{}
+}
 
 // Temperature type
-func (s TemperatureServicer) Temperature(city string, unit string) (*baila.Temperature, error) {
+func (s temperatureServicer) Temperature(city string, unit string) (*baila.Temperature, error) {
 
 	switch unit {
 	case "1":

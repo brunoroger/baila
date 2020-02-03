@@ -78,7 +78,7 @@ func main() {
 
 			unit = strings.ReplaceAll(unit, "\n", "")
 
-			service := api.TemperatureServicer{}
+			service := api.NewTemperatureServicer()
 
 			response, err := service.Temperature(city, unit)
 
