@@ -4,9 +4,14 @@ import (
 	"baila"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
-	"net/url"
+)
+
+const (
+	urlPath = "https://openweathermap.org/data/2.5/weather?q=%s&appid=%s&units=%s"
+	appid   = "b6907d289e10d714a6e88b30761fae22"
 )
 
 // temperatureServicer service
@@ -29,19 +34,9 @@ func (s temperatureServicer) Temperature(city string, unit string) (*baila.Tempe
 		return nil, errors.New("unit not found")
 	}
 
-	baseURL, errEncode := url.Parse("https://openweathermap.org/data/2.5/weather")
-	if errEncode != nil {
-		return nil, errEncode
-	}
+	url := fmt.Sprintf(urlPath, city, appid, unit)
 
-	params := url.Values{}
-	params.Add("q", city)
-	params.Add("appid", "b6907d289e10d714a6e88b30761fae22")
-	params.Add("units", unit)
-
-	baseURL.RawQuery = params.Encode()
-
-	req, errReq := http.NewRequest("GET", baseURL.String(), nil)
+	req, errReq := http.NewRequest("GET", url, nil)
 	if errReq != nil {
 		return nil, errReq
 	}
